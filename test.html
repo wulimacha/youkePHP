@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<form action="upload_file.php" method="post" enctype="multipart/form-data" id="file_upload">
+			<p>图片预览：</p>
+			<div id="test-image-preview">
+				<img class="img-style" id="img-show" />
+			</div>
+			<p>
+				<input type="file" id="file" name="file" accept="image/gif, image/jpeg, image/png, image/jpg" onchange="filechange(event)">
+			</p>
+			<p id="test-file-info"></p>
+			<input type="submit" id="post-file"  />
+		</form>
+	</body>
+
+</html>

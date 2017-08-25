@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>location hash</title>
+</head>
+<body>
+<!-- Just a simple navigation --->
+<ul id="navigation">
+<li><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="service.html">Service</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+<div id="content"></div>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script>
+google.load("jquery","1.3.2",{uncompressed:true});
+</script>
+<script>
+$(document).ready(function(){
+     if(window.location.hash!=""){
+        var hashpage = window.location.hash.split("#");
+        $("#navigation a").each(function() {
+              if($(this).attr('href') == hashpage[1]) {
+                   $(this).addClass("curr");
+                   return false;
+              }
+         });
+         $("#content").load(hashpage[1]);
+     }
+     //navigation
+     $("#navigation a").unbind("click").click(function(){
+        var page = $(this).attr("href");
+        $("#content").load(page);
+        window.location.hash="#"+page;
+        return false;
+     });
+});
+
+</script>
+</body>
+</html>
