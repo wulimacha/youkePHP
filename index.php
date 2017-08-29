@@ -8,8 +8,37 @@
 		<link href="bootstrap-3.3.0/dist/css/bootstrap.css" rel="stylesheet" />
 		<link href="css/buttoncss.css" rel="stylesheet" />
 		<link href="css/index_css.css" rel="stylesheet" />
+		<script type="text/javascript">
+			function show_new(i,str)
+			{
+			    if (i=="")
+			    {
+			        document.getElementById("show_new").innerHTML="";
+			        return;
+			    } 
+			    if (window.XMLHttpRequest)
+			    {
+			        // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+			        xmlhttp=new XMLHttpRequest();
+			    }
+			    else
+			    {
+			        // IE6, IE5 浏览器执行代码
+			        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			    }
+			    xmlhttp.onreadystatechange=function()
+			    {
+			        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			        {
+			            document.getElementById("show_"+str).innerHTML=xmlhttp.responseText;
+			        }
+			    }
+			    xmlhttp.open("GET","html/show_new.php?page="+i+"&type="+str,true);
+			    xmlhttp.send();			    
+			}
+		</script>
 	</head>
-
+	
 	<body>
 		<!--导航条-start-->
 		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" style="background-color:#2B2B2B;border: none;">
@@ -117,7 +146,7 @@
 				<div class="tab-pane active" id="tabs-first">
 					<div class="tab_content">
 						<div class="container">
-							<div class="row">
+							<div id="show_每日上新" class="row">
 								<?php
 									$conn = mysqli_connect('localhost','root','123456');
 									if(mysqli_errno($conn)){
@@ -126,7 +155,8 @@
 									}
 									mysqli_select_db($conn,'php');
 									mysqli_set_charset($conn,'utf8');
-									$count_sql = "select count(id) as c from goods where type = '每日上新'";
+									$type = '每日上新';
+									$count_sql = "select count(id) as c from goods where type = '".$type."'";
 									$result = mysqli_query($conn,$count_sql);
 									$data = mysqli_fetch_assoc($result);
 									$count = $data['c'];
@@ -147,11 +177,12 @@
 									$offset = ($page - 1) * $num;
 									$previous = $page - 1;
 									$next = $page +1;
-									$sql_select_goods = "select * from goods where type = '每日上新' limit $offset,$num";
+									
+									$sql_select_goods = "select * from goods where type = '".$type."' limit $offset,$num";
 									$result = mysqli_query($conn,$sql_select_goods);
 									if($result && mysqli_num_rows($result)){
 										while($row = mysqli_fetch_assoc($result)){
-											echo "<a href=\"html/detail.php?id=".$row['id']."\"><div class=\"col-md-3 col-xs-6 col-lg-3 col-sm-3 divred\">";
+											echo "<a href=\"html/detail.php?id=".$row['id']."\"><div class=\"col-md-3 col-xs-6 col-lg-3 col-sm-3 divred\" style=\"margin-top:25px;\">";
 											echo "<img class=\"img-style\" src=".$row['smallurl']." />";
 											echo "<h3>&yen;".$row['price']."</h3>";
 											echo "<button class=\"btn \" type=\"submit\" id=\"\">立即购买</button>";
@@ -159,23 +190,28 @@
 											echo "</div></a>";
 										}
 											echo "</div>";
+											
+											
 											echo "<div class=\"row\">";									
 											echo "<!--分页-start-->";
 											echo "<div class=\"col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-5 col-md-offset-4 col-sm-offset-3 col-xs-offset-2\">";
 											echo "<nav aria-label=\"Page navigation\">";	
 											echo "<ul class=\"pagination pagination-lg\">";											
 											echo "<li>";			
-											echo "<a href=\"index.php?page=".$previous."\" aria-label=\"Previous\">";				
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$previous.",'".$type."')\"; aria-label=\"Previous\">";				
 											echo "<span aria-hidden=\"true\">&laquo;</span>";					
 											echo "</a>";			
 											echo "</li>";	
 										for($i = 1;$i <= $total;$i ++ ){		
 											echo "<li>";			
-											echo "<a href=\"index.php?page=".$i."\">".$i."</a>";				
+											//echo "<a href=\"index.php?page=".$i."\">".$i."</a>";
+											//--------------------------------------------------
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$i.",'".$type."')\">".$i."</a>";
+											//--------------------------------------------------				
 											echo "</li>";												
 											}			
 											echo "<li>";			
-											echo "<a href=\"index.php?page=".$next."\" aria-label=\"Next\">";				
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$next.",'".$type."')\" aria-label=\"Next\">";				
 											echo "<span aria-hidden=\"true\">&raquo;</span>";					
 											echo "</a>";				
 											echo "</li>";			
@@ -185,18 +221,17 @@
 											echo "<!--分页-end-->";
 									}
 									else{
-										exit("<script type='text/javascript'>alert('失败！');history.go(-1);</script>");
+										exit("<script type='text/javascript'>alert('失败1！');history.go(-1);</script>");
 									}
-								?>
+								?>						
 							</div>
 						</div>
 					</div>
 				</div>
-
 				<div class="tab-pane" id="tabs-second">
 					<div class="tab_content">
 						<div class="container">
-							<div class="row">
+							<div id="show_9.9包邮" class="row">
 								<?php
 									$conn = mysqli_connect('localhost','root','123456');
 									if(mysqli_errno($conn)){
@@ -205,7 +240,8 @@
 									}
 									mysqli_select_db($conn,'php');
 									mysqli_set_charset($conn,'utf8');
-									$count_sql = "select count(id) as c from goods where type = '9.9包邮'";
+									$type = '9.9包邮';
+									$count_sql = "select count(id) as c from goods where type = '".$type."'";
 									$result = mysqli_query($conn,$count_sql);
 									$data = mysqli_fetch_assoc($result);
 									$count = $data['c'];
@@ -226,11 +262,11 @@
 									$offset = ($page - 1) * $num;
 									$previous = $page - 1;
 									$next = $page +1;
-									$sql_select_goods = "select * from goods where type = '9.9包邮' limit $offset,$num";
+									$sql_select_goods = "select * from goods where type = '".$type."' limit $offset,$num";
 									$result = mysqli_query($conn,$sql_select_goods);
 									if($result && mysqli_num_rows($result)){
 										while($row = mysqli_fetch_assoc($result)){
-											echo "<a href=\"html/detail.php?id=".$row['id']."\"><div class=\"col-md-3 col-xs-6 col-lg-3 col-sm-3 divred\">";
+											echo "<a href=\"html/detail.php?id=".$row['id']."\"><div class=\"col-md-3 col-xs-6 col-lg-3 col-sm-3 divred\" style=\"margin-top:25px;\">";
 											echo "<img class=\"img-style\" src=".$row['smallurl']." />";
 											echo "<h3>&yen;".$row['price']."</h3>";
 											echo "<button class=\"btn \" type=\"submit\" id=\"\">立即购买</button>";
@@ -238,23 +274,28 @@
 											echo "</div></a>";
 										}
 											echo "</div>";
+											
+											
 											echo "<div class=\"row\">";									
 											echo "<!--分页-start-->";
 											echo "<div class=\"col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-5 col-md-offset-4 col-sm-offset-3 col-xs-offset-2\">";
 											echo "<nav aria-label=\"Page navigation\">";	
 											echo "<ul class=\"pagination pagination-lg\">";											
 											echo "<li>";			
-											echo "<a href=\"index.php?page=".$previous."\" aria-label=\"Previous\">";				
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$previous.",'".$type."')\" aria-label=\"Previous\">";				
 											echo "<span aria-hidden=\"true\">&laquo;</span>";					
 											echo "</a>";			
 											echo "</li>";	
 										for($i = 1;$i <= $total;$i ++ ){		
 											echo "<li>";			
-											echo "<a href=\"index.php?page=".$i."\">".$i."</a>";				
+											//echo "<a href=\"index.php?page=".$i."\">".$i."</a>";
+											//--------------------------------------------------
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$i.",'".$type."')\">".$i."</a>";
+											//--------------------------------------------------				
 											echo "</li>";												
 											}			
 											echo "<li>";			
-											echo "<a href=\"index.php?page=".$next."\" aria-label=\"Next\">";				
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$next.",'".$type."')\" aria-label=\"Next\">";				
 											echo "<span aria-hidden=\"true\">&raquo;</span>";					
 											echo "</a>";				
 											echo "</li>";			
@@ -264,7 +305,7 @@
 											echo "<!--分页-end-->";
 									}
 									else{
-										exit("<script type='text/javascript'>alert('失败！');history.go(-1);</script>");
+										exit("<script type='text/javascript'>alert('失败2！');history.go(-1);</script>");
 									}
 								?>
 							</div>
@@ -275,61 +316,85 @@
 				<div class="tab-pane" id="tabs-third">
 					<div class="tab_content">
 						<div class="container">
-							<div class="row">
+							<div id="show_今日推荐" class="row">
 								<?php
 									$conn = mysqli_connect('localhost','root','123456');
 									if(mysqli_errno($conn)){
 										echo mysqli_errno($conn);
-										exit;
+										exit("<script type='text/javascript'>alert('数据库连接失败！');history.go(-1);</script>");
 									}
 									mysqli_select_db($conn,'php');
 									mysqli_set_charset($conn,'utf8');
-									$sql_select_goods = "select * from goods where type = '今日推荐' limit 0,8";
+									$type = '今日推荐';
+									$count_sql = "select count(id) as c from goods where type = '".$type."'";
+									$result = mysqli_query($conn,$count_sql);
+									$data = mysqli_fetch_assoc($result);
+									$count = $data['c'];
+									if(isset($_GET['page'])){
+										$page = (int)$_GET['page'];
+									}
+									else{
+										$page = 1;
+									}
+									$num = 8;
+									$total = ceil($count/$num);	
+									if($page <= 1){
+										$page = 1;
+									}
+									if($page >= $total){
+										$page = $total;
+									}							
+									$offset = ($page - 1) * $num;
+									$previous = $page - 1;
+									$next = $page +1;
+									$sql_select_goods = "select * from goods where type = '".$type."' limit $offset,$num";
 									$result = mysqli_query($conn,$sql_select_goods);
 									if($result && mysqli_num_rows($result)){
 										while($row = mysqli_fetch_assoc($result)){
-											echo "<div class=\"col-md-3 col-xs-6 col-lg-3 col-sm-3 divred\">";
+											echo "<a href=\"html/detail.php?id=".$row['id']."\"><div class=\"col-md-3 col-xs-6 col-lg-3 col-sm-3 divred\" style=\"margin-top:25px;\">";
 											echo "<img class=\"img-style\" src=".$row['smallurl']." />";
-											echo "<h3>".$row['price']."</h3>";
-											echo "</div>";
+											echo "<h3>&yen;".$row['price']."</h3>";
+											echo "<button class=\"btn \" type=\"submit\" id=\"\">立即购买</button>";
+											echo "<a href=\"html/addcart.php?ids=".$row['id']."\"><button class=\"btn \" style=\"margin-left:50px;\" type=\"submit\" id=\"\">加入购物车</button></a>";
+											echo "</div></a>";
 										}
+											echo "</div>";
+											
+											
+											echo "<div class=\"row\">";									
+											echo "<!--分页-start-->";
+											echo "<div class=\"col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-5 col-md-offset-4 col-sm-offset-3 col-xs-offset-2\">";
+											echo "<nav aria-label=\"Page navigation\">";	
+											echo "<ul class=\"pagination pagination-lg\">";											
+											echo "<li>";			
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$previous.",'".$type."')\" aria-label=\"Previous\">";				
+											echo "<span aria-hidden=\"true\">&laquo;</span>";					
+											echo "</a>";			
+											echo "</li>";	
+										for($i = 1;$i <= $total;$i ++ ){		
+											echo "<li>";			
+											//echo "<a href=\"index.php?page=".$i."\">".$i."</a>";
+											//--------------------------------------------------
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$i.",'".$type."')\">".$i."</a>";
+											//--------------------------------------------------				
+											echo "</li>";												
+											}			
+											echo "<li>";			
+											echo "<a href=\"javascript:void(0);\" onclick=\"show_new(".$next.",'".$type."')\" aria-label=\"Next\">";				
+											echo "<span aria-hidden=\"true\">&raquo;</span>";					
+											echo "</a>";				
+											echo "</li>";			
+											echo "</ul>";		
+											echo "</nav>";	
+											echo "</div>";																					
+											echo "<!--分页-end-->";
+									}
+									else{
+										exit("<script type='text/javascript'>alert('失败3！');history.go(-1);</script>");
 									}
 								?>
 							</div>
-						</div>
-						<!--分页-start-->
-			<div class="col-lg-4 col-md-4 col-sm-6 col-xs-7 col-lg-offset-5 col-md-offset-4 col-sm-offset-3 col-xs-offset-2">
-				<nav aria-label="Page navigation">
-					<ul class="pagination pagination-lg">
-						<li>
-							<a href="#" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">1</a>
-						</li>
-						<li>
-							<a href="#">2</a>
-						</li>
-						<li>
-							<a href="#">3</a>
-						</li>
-						<li>
-							<a href="#">4</a>
-						</li>
-						<li>
-							<a href="#">5</a>
-						</li>
-						<li>
-							<a href="#" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
-			</div>
-			<!--分页-end-->
+						</div>					
 					</div>
 				</div>
 			</div>
@@ -601,7 +666,20 @@
 				<button data-target="#myModal-cart" data-toggle="modal" onmouseover="this.style.backgroundColor = 'rgb(255,70,78)';" onmouseout="this.style.backgroundColor = '#2b2b2b';" style="border: none;background-color: #2B2B2B;">
 					<span class="glyphicon glyphicon-shopping-cart"></span>
 					<span style="color: white;">购物车</span>
-					<span class="badge"><?php $attr = array(); $attr = $_SESSION["gwc"]; echo count($attr);?></span>
+					<span class="badge">
+						<?php 
+							$attr = array();
+							if(isset($_SESSION["gwc"])){
+								$attr = $_SESSION["gwc"]; 
+								echo count($attr);
+							}
+							else{
+								echo 0;
+							}
+							?> 
+					</span>
+							
+							
 				</button>
 			</div>
 			<div class="div-right-Collection">
@@ -708,6 +786,7 @@
 			function loginsubmit(){
 				document.getElementById("login-submit").click();
 			}
+			
 			/*function isselect(obj,cname) {
 				//alert("GG");
 				var checkboxs = document.getElementsByName(cname);

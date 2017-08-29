@@ -25,6 +25,116 @@ else{
 			         tab.onclick();
 			    }
 			}
+			function show_mygoods(i,str)
+			{
+			    if (i=="")
+			    {
+			        document.getElementById("show_"+str).innerHTML="";
+			        return;
+			    } 
+			    if (window.XMLHttpRequest)
+			    {
+			        // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+			        xmlhttp=new XMLHttpRequest();
+			    }
+			    else
+			    {
+			        // IE6, IE5 浏览器执行代码
+			        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			    }
+			    xmlhttp.onreadystatechange=function()
+			    {
+			        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			        {
+			            document.getElementById("show_"+str).innerHTML=xmlhttp.responseText;
+			        }
+			    }
+			    xmlhttp.open("GET","delgoods.php?id="+i,true);
+			    xmlhttp.send();
+			    
+			}
+			function show_mytask(i,str)
+			{
+			    if (i=="")
+			    {
+			        document.getElementById("show_"+str).innerHTML="";
+			        return;
+			    } 
+			    if (window.XMLHttpRequest)
+			    {
+			        // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+			        xmlhttp=new XMLHttpRequest();
+			    }
+			    else
+			    {
+			        // IE6, IE5 浏览器执行代码
+			        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			    }
+			    xmlhttp.onreadystatechange=function()
+			    {
+			        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			        {
+			            document.getElementById("show_"+str).innerHTML=xmlhttp.responseText;
+			        }
+			    }
+			    xmlhttp.open("GET","deltask.php?id="+i,true);
+			    xmlhttp.send();
+			    
+			}
+			function search_goods(i,str)
+			{
+			    /*if (i=="")
+			    {
+			        document.getElementById("show_"+str).innerHTML="";
+			        return;
+			    } */
+			    if (window.XMLHttpRequest)
+			    {
+			        // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+			        xmlhttp=new XMLHttpRequest();
+			    }
+			    else
+			    {
+			        // IE6, IE5 浏览器执行代码
+			        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			    }
+			    xmlhttp.onreadystatechange=function()
+			    {
+			        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			        {
+			            document.getElementById("show_"+str).innerHTML=xmlhttp.responseText;
+			        }
+			    }
+			    xmlhttp.open("GET","search_goods.php?id="+i,true);
+			    xmlhttp.send();			    
+			}
+			function search_task(i,str)
+			{
+			    /*if (i=="")
+			    {
+			        document.getElementById("show_"+str).innerHTML="";
+			        return;
+			    } */
+			    if (window.XMLHttpRequest)
+			    {
+			        // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+			        xmlhttp=new XMLHttpRequest();
+			    }
+			    else
+			    {
+			        // IE6, IE5 浏览器执行代码
+			        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			    }
+			    xmlhttp.onreadystatechange=function()
+			    {
+			        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			        {
+			            document.getElementById("show_"+str).innerHTML=xmlhttp.responseText;
+			        }
+			    }
+			    xmlhttp.open("GET","search_task.php?id="+i,true);
+			    xmlhttp.send();			    
+			}
 		</script>
 				
 	</head>
@@ -1229,11 +1339,11 @@ else{
 							<div class="tab-content">
 								<div class="tab-pane active" id="tabs-myrelease-goods">
 									<div class="" style="margin-top: 10px;">
-										<input class="col-lg-2" type="text" placeholder="输入商品名称或订单编号查询！" />
+										<input id="search_goods" class="col-lg-2" type="text" placeholder="输入商品名称或订单编号查询！" onkeyup="search_goods(this.value,'mygoods')" />
 										<button>订单搜索</button>
 									</div>
 									<hr />															
-									<div>
+									<div id="show_mygoods">
 										<?php
 											if(isset($_SESSION['userid'])){
 											$conn = mysqli_connect('localhost','root','123456');
@@ -1277,7 +1387,7 @@ else{
 												echo "</div>";
 												echo "<div class=\"textcenter col-lg-2 col-md-2 col-sm-2\" style=\"height: 100%;padding-top: 25px;border-left: 1px solid #E0E0E0;\">";
 												echo "<button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;font-size: 15px;width: 100%\">查看详情</button>";
-												echo "<a href=\"delgoods.php?id=".$row['id']."\"><button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;margin-top: 10px;font-size: 14px;width: 100%\">下架商品</button></a>";
+												echo "<a href=\"javascript:void(0);\" onclick=\"show_mygoods(".$row['id'].",'mygoods')\"><button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;margin-top: 10px;font-size: 14px;width: 100%\">下架商品</button></a>";
 												echo "</div>";											
 												echo "</div>";
 											}
@@ -1291,24 +1401,23 @@ else{
 								</div>
 								<div class="tab-pane" id="tabs-myrelease-task">
 									<div class="" style="margin-top: 10px;">
-										<input class="col-lg-2" type="text" placeholder="输入商品名称或订单编号查询！" />
+										<input class="col-lg-2" type="text" placeholder="输入商品名称或订单编号查询！" onkeyup="search_task(this.value,'mytask')"/>
 										<button>订单搜索</button>
 									</div>
 									<hr />
 
-									<div>
+									<div id="show_mytask">
 										<?php
 											if(isset($_SESSION['userid'])){											
 												$sql_select_goods = "select * from task where userid = ".$_SESSION['userid']."";
 												$result = mysqli_query($conn,$sql_select_goods);
-												if($result && mysqli_num_rows($result)){
-												
+												if($result && mysqli_num_rows($result)){												
 												while($row = mysqli_fetch_assoc($result)){
-													$id = $row['id'];
+													/*$id = $row['id'];
 													$smallurl = $row['smallurl'];
 													$remarks = $row['remarks'];
 													$price = $row['price'];
-													$quantity = $row['quantity'];
+													$quantity = $row['quantity'];*/
 												echo "<div class=\"row\">";
 												echo "<div class=\"col-lg-2 col-md-2 col-sm-3 textcenter\"><span class=\"glyphicon glyphicon-calendar\" style=\"color: red;\"></span>2017-07-25</div>";
 												echo "<div class=\"col-lg-4 col-md-4 col-sm-4 textcenter\">订单号：".$row['id']."</div>";
@@ -1336,8 +1445,8 @@ else{
 												echo "<p>98%</p>";
 												echo "</div>";
 												echo "<div class=\"textcenter col-lg-2 col-md-2 col-sm-2\" style=\"height: 100%;padding-top: 25px;border-left: 1px solid #E0E0E0;\">";
-												echo "<a href=deltask.php?id=".$row['id']."><button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;font-size: 15px;width: 100%\">删除请求</button></a>";
-												echo "<button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;margin-top: 10px;font-size: 14px;width: 100%\">确认完成</button>";
+												echo "<a href=\"javascript:void(0);\"><button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;font-size: 14px;width: 100%\">确认完成</button></a>";
+												echo "<a href=\"javascript:void(0);\" onclick=\"show_mytask(".$row['id'].",'mytask')\"><button class=\"button button-glow button-border button-rounded button-primary\" style=\"padding: 0px 5px;border: none;font-size: 15px;width: 100%;margin-top: 10px;\">删除请求</button></a>";											
 												echo "</div>";											
 												echo "</div>";
 											}
